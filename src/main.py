@@ -1,14 +1,15 @@
-from db import get_connection
+import sys
+from PyQt6.QtWidgets import QApplication
+from views.login import LoginWindow
 
 
 def main():
-    try:
-        connection = get_connection()
-        print("Database Connected Successfully!")
-        connection.close()
+    app = QApplication(sys.argv)
 
-    except Exception as e:
-        print(e)
+    window = LoginWindow()
+    window.show()
+
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ def login(email, password, role):
     if role == "User":
         query = """
         SELECT *
-        FROM Users
+        FROM `user`
         WHERE email=%s AND password=%s
         """
     else:
