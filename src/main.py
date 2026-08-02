@@ -1,10 +1,15 @@
 from db import get_connection
 
-try:
-    conn = get_connection()
-    print("Database Connected Successfully!")
 
-    conn.close()
+def main():
+    try:
+        connection = get_connection()
+        print("Database Connected Successfully!")
+        connection.close()
 
-except Exception as e:
-    print(e)
+    except Exception as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main()
