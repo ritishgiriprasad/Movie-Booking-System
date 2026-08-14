@@ -36,6 +36,7 @@ class UserDashboard(QWidget):
 
         browse_btn = QPushButton("🎥 Browse Movies")
         browse_btn.setFixedHeight(50)
+        browse_btn.clicked.connect(self.open_movie_browser)
 
         bookings_btn = QPushButton("🎟 My Bookings")
         bookings_btn.setFixedHeight(50)
@@ -61,3 +62,10 @@ class UserDashboard(QWidget):
         self.login.show()
 
         self.close()
+    def open_movie_browser(self):
+
+        from views.movie_browser import MovieBrowser
+
+        self.movie_browser = MovieBrowser(self.user)
+
+        self.movie_browser.show()
