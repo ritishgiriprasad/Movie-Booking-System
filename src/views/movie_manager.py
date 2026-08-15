@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-
+from movies import delete_movie, get_movie_by_id
 from movies import get_all_movies, search_movies
 
 
@@ -111,7 +111,7 @@ class MovieManager(QWidget):
         edit_button.clicked.connect(self.edit_movie)
 
         delete_button = QPushButton("🗑 Delete Selected")
-        delete_button.clicked.connect(self.delete_movie)
+        delete_button.clicked.connect(self.delete_selected_movie)
 
         action_layout.addWidget(edit_button)
         action_layout.addWidget(delete_button)
@@ -296,15 +296,68 @@ class MovieManager(QWidget):
 
         self.edit_movie_window.show()
 
-    def delete_movie(self):
+    def delete_selected_movie(self):
 
         movie_id = self.get_selected_movie_id()
 
         if movie_id is None:
+            QMessageBox.warning(
+                self,
+                "No Movie Selected",
+                "Please select a movie to delete."
+            )
             return
 
-        QMessageBox.information(
+        movie = get_movie_by_id(movie_id)
+
+        if not movie:
+            QMessageBox.warning(
+                self,
+                "Movie Not Found",
+                "The selected movie could not be found."
+            )
+            return
+
+        # Confirmation dialog
+        reply = QMessageBox.question(
             self,
-            "Coming Next",
-            f"Delete confirmation for movie ID {movie_id} will be implemented next."
+            "Confirm Delete",
+            f"Are you sure you want to delete\n\n"
+            f"'{movie['title']}'?",
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
         )
+
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        try:
+
+            deleted = delete_movie(movie_id)
+
+            if deleted:
+
+                QMessageBox.information(
+                    self,
+                    "Movie Deleted",
+                    f"'{movie['title']}' was deleted successfully."
+                )
+
+                self.load_movies()
+
+            else:
+
+                QMessageBox.warning(
+                    self,
+                    "Delete Failed",
+                    "The movie could not be deleted."
+                )
+
+        except Exception as e:
+
+            QMessageBox.critical(
+                self,
+                "Database Error",
+                f"Could not delete the movie.\n\n{str(e)}"
+            )
