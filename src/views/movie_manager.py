@@ -260,11 +260,11 @@ class MovieManager(QWidget):
 
     def add_movie(self):
 
-        QMessageBox.information(
-            self,
-            "Coming Next",
-            "The Add Movie form will be implemented next."
-        )
+        from views.add_movie import AddMovieWindow
+
+        self.add_movie_window = AddMovieWindow(self)
+
+        self.add_movie_window.show()
 
     def edit_movie(self):
 
@@ -273,11 +273,28 @@ class MovieManager(QWidget):
         if movie_id is None:
             return
 
-        QMessageBox.information(
+        from movies import get_movie_by_id
+
+        movie = get_movie_by_id(movie_id)
+
+        if not movie:
+
+            QMessageBox.warning(
+                self,
+                "Movie Not Found",
+                "The selected movie could not be found."
+            )
+
+            return
+
+        from views.add_movie import AddMovieWindow
+
+        self.edit_movie_window = AddMovieWindow(
             self,
-            "Coming Next",
-            f"Edit form for movie ID {movie_id} will be implemented next."
+            movie
         )
+
+        self.edit_movie_window.show()
 
     def delete_movie(self):
 
