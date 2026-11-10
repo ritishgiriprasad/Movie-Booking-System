@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import (
-    QWidget,
+    QDialog,
     QLabel,
     QPushButton,
     QVBoxLayout,
@@ -16,7 +16,7 @@ from PyQt6.QtCore import QDate, Qt
 from movies import add_movie
 
 
-class AddMovieWindow(QWidget):
+class AddMovieWindow(QDialog):
 
     def __init__(self, parent=None, movie=None):
         super().__init__(parent)
@@ -24,10 +24,14 @@ class AddMovieWindow(QWidget):
         self.parent_window = parent
         self.movie = movie
 
-        self.setWindowTitle("Add Movie")
+        self.setWindowTitle("Edit Movie" if movie else "Add Movie")
         self.setFixedSize(500, 650)
 
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
+        self.setAutoFillBackground(True)
+
         self.setup_ui()
+
         if self.movie:
             self.load_movie_data()
 
@@ -124,8 +128,13 @@ class AddMovieWindow(QWidget):
         self.setLayout(layout)
 
         self.setStyleSheet("""
-            QWidget {
+            QDialog {
                 background-color: #111827;
+                color: white;
+            }
+
+            QLabel {
+                background-color: transparent;
                 color: white;
             }
 
@@ -133,6 +142,7 @@ class AddMovieWindow(QWidget):
             QTextEdit,
             QDateEdit {
                 background-color: #1f2937;
+                color: white;
                 border: 1px solid #374151;
                 border-radius: 8px;
                 padding: 8px;

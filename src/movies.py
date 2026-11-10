@@ -22,7 +22,7 @@ def get_all_movies():
                     release_date,
                     description
                 FROM movies
-                ORDER BY title
+                ORDER BY movie_id
             """
 
             cursor.execute(query)

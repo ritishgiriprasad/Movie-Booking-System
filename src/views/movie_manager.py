@@ -8,12 +8,10 @@ from PyQt6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QMessageBox,
-    QHeaderView
+    QHeaderView,
 )
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from movies import delete_movie, get_movie_by_id
-from movies import get_all_movies, search_movies
+from movies import delete_movie, get_movie_by_id, get_all_movies, search_movies
 
 
 class MovieManager(QWidget):
@@ -86,7 +84,7 @@ class MovieManager(QWidget):
             "Genre",
             "Language",
             "Duration",
-            "Rating"
+            "Rating",
         ])
 
         self.movie_table.setEditTriggers(
@@ -185,7 +183,6 @@ class MovieManager(QWidget):
     def clear_search(self):
 
         self.search_box.clear()
-
         self.load_movies()
 
     def display_movies(self, movies):
@@ -193,9 +190,7 @@ class MovieManager(QWidget):
         self.movie_table.setRowCount(0)
 
         for movie in movies:
-
             row = self.movie_table.rowCount()
-
             self.movie_table.insertRow(row)
 
             self.movie_table.setItem(
@@ -225,17 +220,13 @@ class MovieManager(QWidget):
             self.movie_table.setItem(
                 row,
                 4,
-                QTableWidgetItem(
-                    f"{movie['duration']} min"
-                )
+                QTableWidgetItem(f"{movie['duration']} min")
             )
 
             self.movie_table.setItem(
                 row,
                 5,
-                QTableWidgetItem(
-                    str(movie["rating"])
-                )
+                QTableWidgetItem(str(movie["rating"]))
             )
 
     def get_selected_movie_id(self):
@@ -243,19 +234,15 @@ class MovieManager(QWidget):
         selected_rows = self.movie_table.selectionModel().selectedRows()
 
         if not selected_rows:
-
             QMessageBox.warning(
                 self,
                 "No Movie Selected",
                 "Please select a movie first."
             )
-
             return None
 
         row = selected_rows[0].row()
-
         movie_id = self.movie_table.item(row, 0).text()
-
         return int(movie_id)
 
     def add_movie(self):
@@ -263,7 +250,6 @@ class MovieManager(QWidget):
         from views.add_movie import AddMovieWindow
 
         self.add_movie_window = AddMovieWindow(self)
-
         self.add_movie_window.show()
 
     def edit_movie(self):
@@ -273,27 +259,19 @@ class MovieManager(QWidget):
         if movie_id is None:
             return
 
-        from movies import get_movie_by_id
-
         movie = get_movie_by_id(movie_id)
 
         if not movie:
-
             QMessageBox.warning(
                 self,
                 "Movie Not Found",
                 "The selected movie could not be found."
             )
-
             return
 
         from views.add_movie import AddMovieWindow
 
-        self.edit_movie_window = AddMovieWindow(
-            self,
-            movie
-        )
-
+        self.edit_movie_window = AddMovieWindow(self, movie)
         self.edit_movie_window.show()
 
     def delete_selected_movie(self):
@@ -318,36 +296,28 @@ class MovieManager(QWidget):
             )
             return
 
-        # Confirmation dialog
         reply = QMessageBox.question(
             self,
             "Confirm Delete",
-            f"Are you sure you want to delete\n\n"
-            f"'{movie['title']}'?",
-            QMessageBox.StandardButton.Yes |
+            f"Are you sure you want to delete\n\n'{movie['title']}'?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No
         )
 
         if reply != QMessageBox.StandardButton.Yes:
             return
 
         try:
-
             deleted = delete_movie(movie_id)
 
             if deleted:
-
                 QMessageBox.information(
                     self,
                     "Movie Deleted",
                     f"'{movie['title']}' was deleted successfully."
                 )
-
                 self.load_movies()
-
             else:
-
                 QMessageBox.warning(
                     self,
                     "Delete Failed",
@@ -355,7 +325,6 @@ class MovieManager(QWidget):
                 )
 
         except Exception as e:
-
             QMessageBox.critical(
                 self,
                 "Database Error",
