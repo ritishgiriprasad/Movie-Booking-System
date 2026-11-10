@@ -40,6 +40,7 @@ class AdminDashboard(QWidget):
 
         shows_btn = QPushButton("🎞 Manage Shows")
         shows_btn.setFixedHeight(50)
+        shows_btn.clicked.connect(self.open_show_manager)
 
         bookings_btn = QPushButton("📋 View Bookings")
         bookings_btn.setFixedHeight(50)
@@ -77,3 +78,8 @@ class AdminDashboard(QWidget):
         self.movie_manager = MovieManager(self.admin)
 
         self.movie_manager.show()
+    def open_show_manager(self):
+        from views.show_manager import ShowManager
+
+        self.show_manager = ShowManager(self.admin)
+        self.show_manager.show()
