@@ -40,6 +40,7 @@ class UserDashboard(QWidget):
 
         bookings_btn = QPushButton("🎟 My Bookings")
         bookings_btn.setFixedHeight(50)
+        bookings_btn.clicked.connect(self.open_my_bookings)
 
         logout_btn = QPushButton("🚪 Logout")
         logout_btn.setFixedHeight(50)
@@ -69,3 +70,9 @@ class UserDashboard(QWidget):
         self.movie_browser = MovieBrowser(self.user)
 
         self.movie_browser.show()
+    def open_my_bookings(self):
+
+        from views.my_bookings import MyBookings
+
+        self.my_bookings = MyBookings(self.user)
+        self.my_bookings.show()

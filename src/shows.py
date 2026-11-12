@@ -180,3 +180,33 @@ def delete_show(show_id):
 
     finally:
         connection.close()
+def get_shows_for_movie(movie_id):
+        """Return shows for a specific movie."""
+
+        connection = get_connection()
+
+        try:
+            with connection.cursor() as cursor:
+                query = """
+                    SELECT
+                        s.show_id,
+                        s.movie_id,
+                        s.hall_id,
+                        m.title AS movie_title,
+                        h.hall_name,
+                        s.show_date,
+                        s.show_time,
+                        s.price,
+                        s.available_seats
+                    FROM Shows s
+                    LEFT JOIN Movies m ON s.movie_id = m.movie_id
+                    LEFT JOIN Halls h ON s.hall_id = h.hall_id
+                    WHERE s.movie_id = %s
+                    ORDER BY s.show_date, s.show_time
+                """
+
+                cursor.execute(query, (movie_id,))
+                return cursor.fetchall()
+
+        finally:
+            connection.close()

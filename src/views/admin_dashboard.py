@@ -1,3 +1,4 @@
+
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
@@ -42,11 +43,9 @@ class AdminDashboard(QWidget):
         shows_btn.setFixedHeight(50)
         shows_btn.clicked.connect(self.open_show_manager)
 
-        bookings_btn = QPushButton("📋 View Bookings")
+        bookings_btn = QPushButton("📋 Bookings & Payments")
         bookings_btn.setFixedHeight(50)
-
-        payments_btn = QPushButton("💳 Payments")
-        payments_btn.setFixedHeight(50)
+        bookings_btn.clicked.connect(self.open_bookings_payments)
 
         logout_btn = QPushButton("🚪 Logout")
         logout_btn.setFixedHeight(50)
@@ -58,7 +57,6 @@ class AdminDashboard(QWidget):
         layout.addWidget(movies_btn)
         layout.addWidget(shows_btn)
         layout.addWidget(bookings_btn)
-        layout.addWidget(payments_btn)
         layout.addWidget(logout_btn)
 
         self.setLayout(layout)
@@ -71,15 +69,24 @@ class AdminDashboard(QWidget):
         self.login.show()
 
         self.close()
+
     def open_movie_manager(self):
 
         from views.movie_manager import MovieManager
 
         self.movie_manager = MovieManager(self.admin)
-
         self.movie_manager.show()
+
     def open_show_manager(self):
+
         from views.show_manager import ShowManager
 
         self.show_manager = ShowManager(self.admin)
         self.show_manager.show()
+
+    def open_bookings_payments(self):
+
+        from views.admin_bookings_payments import AdminBookingsPayments
+
+        self.bookings_payments = AdminBookingsPayments(self.admin)
+        self.bookings_payments.show()

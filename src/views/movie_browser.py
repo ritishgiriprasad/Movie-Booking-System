@@ -240,20 +240,13 @@ class MovieBrowser(QWidget):
 
         return card
 
+    
     def show_movie_details(self, movie):
+        from views.showtime_selection import ShowtimeSelection
 
-        details = (
-            f"Title: {movie['title']}\n\n"
-            f"Genre: {movie['genre']}\n"
-            f"Language: {movie['language']}\n"
-            f"Duration: {movie['duration']} minutes\n"
-            f"Rating: ⭐ {movie['rating']}\n"
-            f"Release Date: {movie['release_date']}\n\n"
-            f"{movie['description']}"
+        self.showtime_window = ShowtimeSelection(
+            self.user,
+            movie
         )
 
-        QMessageBox.information(
-            self,
-            movie["title"],
-            details
-        )
+        self.showtime_window.show()
